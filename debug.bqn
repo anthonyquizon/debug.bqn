@@ -4,15 +4,22 @@ TermSize←{𝕊:
   t←¯1↓1⊑•SH⟨"sh","-c","stty size </dev/tty"⟩ ⋄ •BQN '‿'¨⌾((' '=t)⊸/)t
 }⎊(24‿80˙)
 
-Write ⇐ {
-  𝕩
+rename← @•FFI"i32"‿"rename"‿"*u8:c8"‿"*u8:c8"
+Write ⇐ {𝕊:
+  # atomic write
+  d←"woo!"
+  t←∾⟜".tmp"f←"/tmp/debug.data"
+  t •file.Chars d
+  {𝕊:•Out "Error writing output"}⍟0⊸≠ Rename t‿f∾¨@ 
 }
 
 Eval⇐{
-  𝕩
+  i‿t𝕊s:i≡"q"?{•Exit 0}
+;   ·𝕊s:s
 }
 
 Render⇐{
+
   𝕩
 }
 
@@ -39,7 +46,7 @@ Input⇐{
     •term.Flush@
     •Delay⍟(>⟜0) |fr-t-t0
     s‿t
-  } •_while_ 1 ⟨Make@,•MonoTime@⟩
-; 𝕩
+  } •_while_ 1 ⟨⟨⟩,•MonoTime@⟩
+; 𝕩: @
 }•args
 
